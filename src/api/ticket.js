@@ -4,7 +4,7 @@ import axios from 'axios'
 export const indexTickets = (user) => {
   return axios({
     method: 'GET',
-    url: apiUrl + '/orders',
+    url: apiUrl + '/tickets',
     headers: {
       Authorization: `Bearer ${user.token}`
     }
@@ -14,7 +14,7 @@ export const indexTickets = (user) => {
 export const showTicket = (id, user) => {
   return axios({
     method: 'GET',
-    url: apiUrl + `/orders/${id}`,
+    url: apiUrl + `/tickets/${id}`,
     headers: {
       Authorization: `Bearer ${user.token}`
     }
@@ -24,7 +24,7 @@ export const showTicket = (id, user) => {
 export const initiateTicket = (user) => {
   return axios({
     method: 'POST',
-    url: apiUrl + '/orders/open',
+    url: apiUrl + '/tickets/open',
     headers: {
       Authorization: `Bearer ${user.token}`
     }
@@ -34,12 +34,12 @@ export const initiateTicket = (user) => {
 export const createTicket = (user) => {
   return axios({
     method: 'POST',
-    url: apiUrl + '/orders',
+    url: apiUrl + '/tickets',
     headers: {
       Authorization: `Bearer ${user.token}`
     },
     data: {
-      order: {
+      ticket: {
         contents: [],
         owner: user,
         coupon: '',
@@ -52,12 +52,12 @@ export const createTicket = (user) => {
 export const updateTicket = (id, data, user) => {
   return axios({
     method: 'PATCH',
-    url: apiUrl + `/orders/${id}`,
+    url: apiUrl + `/tickets/${id}`,
     headers: {
       Authorization: `Bearer ${user.token}`
     },
     data: {
-      order: {
+      ticket: {
         contents: data
       }
     }
@@ -67,12 +67,12 @@ export const updateTicket = (id, data, user) => {
 export const completeTicket = (id, user) => {
   return axios({
     method: 'PATCH',
-    url: apiUrl + `/orders/${id}`,
+    url: apiUrl + `/tickets/${id}`,
     headers: {
       Authorization: `Bearer ${user.token}`
     },
     data: {
-      order: {
+      ticket: {
         completed: true
       }
     }

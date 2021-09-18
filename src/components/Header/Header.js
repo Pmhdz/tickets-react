@@ -8,7 +8,7 @@ const authenticatedOptions = (
     <NavLink to='/change-password' className='nav-link'>Change Password</NavLink>
     <NavLink to='/sign-out' className='nav-link'>Sign Out</NavLink>
     <NavLink to='/cart' className='nav-link'>Cart</NavLink>
-    <NavLink to='/tickets/order-history' className='nav-link'></NavLink>
+    <NavLink to='/tickets/order-history' className='nav-link'>Recent Orders</NavLink>
   </Fragment>
 )
 
@@ -26,7 +26,7 @@ const alwaysOptions = (
 )
 
 const Header = ({ user }) => (
-  <Navbar bg='warning' variant='dark' expand='md'>
+  <Navbar bg='primary' variant='dark' expand='md'>
     <Navbar.Brand>
       <Link to='/' style={{ color: '#FFF', textDecoration: 'none' }}>PickItTicket</Link>
     </Navbar.Brand>
