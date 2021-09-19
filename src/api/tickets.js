@@ -8,7 +8,7 @@ export const index = () => {
   })
 }
 
-export const showProduct = (id) => {
+export const showTicket = (id) => {
   return axios({
     method: 'GET',
     url: apiUrl + `/tickets/${id}`

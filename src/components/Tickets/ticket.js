@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { withRouter } from 'react-router-dom'
 import { Button, Card, Row, Col } from 'react-bootstrap'
-import { showTicket } from '../../api/tickets'
+import { showTicket } from '../../api'
 import { updateProduct, showProduct } from '../../api/products'
 import {
   addedToCartFailure,
