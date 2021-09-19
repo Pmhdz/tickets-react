@@ -1,45 +1,45 @@
 import apiUrl from '../apiConfig'
 import axios from 'axios'
 // will only ever get users orders
-export const indexTickets = (user) => {
+export const indexProducts = (user) => {
   return axios({
     method: 'GET',
-    url: apiUrl + '/tickets',
+    url: apiUrl + '/products',
     headers: {
       Authorization: `Bearer ${user.token}`
     }
   })
 }
 
-export const showTicket = (id, user) => {
+export const showProduct = (id, user) => {
   return axios({
     method: 'GET',
-    url: apiUrl + `/tickets/${id}`,
+    url: apiUrl + `/products/${id}`,
     headers: {
       Authorization: `Bearer ${user.token}`
     }
   })
 }
 // checks to see if user has an open order before making one and will return that order(with contents) if found, (else it will return the new open order)
-export const initiateTicket = (user) => {
+export const initiateProduct = (user) => {
   return axios({
     method: 'POST',
-    url: apiUrl + '/tickets/open',
+    url: apiUrl + '/products/open',
     headers: {
       Authorization: `Bearer ${user.token}`
     }
   })
 }
 // Does not check to see if use has an existing open order before making one, leading to the potential for multiple open orders in the database
-export const createTicket = (user) => {
+export const createProduct = (user) => {
   return axios({
     method: 'POST',
-    url: apiUrl + '/tickets',
+    url: apiUrl + '/products',
     headers: {
       Authorization: `Bearer ${user.token}`
     },
     data: {
-      ticket: {
+      product: {
         contents: [],
         owner: user,
         coupon: '',
@@ -49,30 +49,30 @@ export const createTicket = (user) => {
   })
 }
 
-export const updateTicket = (id, data, user) => {
+export const updateProduct = (id, data, user) => {
   return axios({
     method: 'PATCH',
-    url: apiUrl + `/tickets/${id}`,
+    url: apiUrl + `/products/${id}`,
     headers: {
       Authorization: `Bearer ${user.token}`
     },
     data: {
-      ticket: {
+      product: {
         contents: data
       }
     }
   })
 }
 
-export const completeTicket = (id, user) => {
+export const completeProduct = (id, user) => {
   return axios({
     method: 'PATCH',
-    url: apiUrl + `/tickets/${id}`,
+    url: apiUrl + `/products/${id}`,
     headers: {
       Authorization: `Bearer ${user.token}`
     },
     data: {
-      ticket: {
+      product: {
         completed: true
       }
     }

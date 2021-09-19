@@ -4,13 +4,13 @@ import axios from 'axios'
 export const index = () => {
   return axios({
     method: 'GET',
-    url: apiUrl + '/products'
+    url: apiUrl + '/tickets'
   })
 }
 
 export const showProduct = (id) => {
   return axios({
     method: 'GET',
-    url: apiUrl + `/products/${id}`
+    url: apiUrl + `/tickets/${id}`
   })
 }

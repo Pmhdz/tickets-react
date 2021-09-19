@@ -1,149 +1,126 @@
-import React from 'react'
-import { withRouter, Link } from 'react-router-dom'
-import { Button, Card } from 'react-bootstrap'
-import { updateTicket, showTicket } from '../../api/tickets'
+import React, { useState, useEffect } from 'react'
+import { withRouter } from 'react-router-dom'
+import { Button, Card, Row, Col } from 'react-bootstrap'
+import { showTicket } from '../../api/tickets'
+import { updateProduct, showProduct } from '../../api/products'
+import {
+  addedToCartFailure,
+  addedToCartSuccess
+} from '../AutoDismissAlert/messages'
+
+const card = {
+  border: 'none',
+  borderRadius: '10px'
+}
+
+const cardImg = {
+  margin: 'auto',
+  padding: '25px',
+  width: 'auto',
+  height: '200px'
+}
+
+const cardTitle = {
+  height: '50px'
+}
+
+const cardCol = {
+  margin: 'auto',
+  marginTop: '10px'
+}
+
+const cardBody = {
+  backgroundColor: 'grey',
+  borderRadius: '0px 0px 8px 8px',
+  color: 'white'
+}
 
 const button = {
   width: 'inherit'
 }
 
-const card = {
-  display: 'inline-block',
-  margin: 'auto',
-  width: '75%',
-  padding: '25px'
-}
+const Tickets = (props) => {
+  const [ticket, setTicket] = useState(null)
+  const { product, user, setProduct, msgAlert } = props
 
-const Cart = (props) => {
-  const { ticket, user, setTicket } = props
-
-  const handleRemoveOne = (event) => {
-    // event.preventDefault()
-    const targetId = event.target.value
-    // grad the order contents from state bind to oldOrder
-    let oldTicket = ticket.contents
-    // iterate over all order items, when we match our targetId (argument from function call),
-    // decrement by one, only if the quantity is 1 or more.  If not, do nothing, deal with
-    // this case in the next statement.
-    oldTicket.forEach((item) => {
-      if (item.id === targetId && item.quantity > 0) {
-        item.quantity--
-      }
-    })
-    // this uses a negative condition for the boolean to delete a zero amount
-    oldTicket = oldTicket.filter((item) => item.quantity !== 0)
-    // now updates the order array at the API level.
-    const id = ticket._id
-    updateTicket(id, oldTicket, user)
-      .then(() => {
-        return showTicket(id, user)
-      })
+  useEffect(() => {
+    showTicket(props.match.params.id)
       .then((res) => setTicket(res.data.ticket))
-      .catch((err) => console.error(err))
-  }
+      .catch(console.error)
+  }, [])
 
-  const handleAddOne = (event) => {
-    // getting id from the value stored on the card in the DOM
-    const targetId = event.target.value
-    // variable to hold our state order object
-    const oldTicket = ticket.contents
-    // iterate through all our order and increment where the id's match
-    oldTicket.forEach((item) => {
-      if (item.id === targetId) {
-        item.quantity++
-      }
-    })
-    // API call to update the order
-    const id = ticket._id
-    updateTicket(id, oldTicket, user)
-      .then(() => {
-        return showTicket(id, user)
+  const handleAddToCart = () => {
+    const oldProduct = product.contents
+    let matched = false
+    const productObj = {
+      id: ticket._id,
+      quantity: 1,
+      ticket: ticket
+    }
+    if (oldProduct.length === 0) {
+      oldProduct.push(productObj)
+    } else {
+      // iterate each item, if id's match, increment quantity
+      oldProduct.forEach((item) => {
+        if (item.id === ticket._id) {
+          // this will track if we've matched for below boolean
+          matched = true
+          item.quantity++
+        }
       })
-      .then((res) => setTicket(res.data.ticket))
-      .catch((err) => console.error(err))
-  }
-
-  const handleRemoveAll = (event) => {
-    // pull ID from DOM element we clicked
-    const targetId = event.target.value
-    // hold our state object in a local variable
-    const oldTicket = ticket.contents
-    // iterate through and find the matching ID and set quantity to 0
-    oldTicket.forEach((item) => {
-      if (item.id === targetId) {
-        item.quantity = 0
+      // after the forEach if there's no match go ahead and push the object,
+      // we need this tracker boolean, because we don't want to have the case of pushing
+      // multiple time inside the forEach loop.  This gives us a way to remember that there
+      // was no match.  It will false-out if it was turned true.
+      if (matched === false) {
+        oldProduct.push(productObj)
       }
-    })
-    // call handle removeOne to delete out of the cart.
-    handleRemoveOne(event)
+    }
+
+    const id = product._id
+    updateProduct(id, oldProduct, user)
+      .then(() => {
+        return showProduct(id, user)
+      })
+      .then((res) => setProduct(res.data.product))
+      .then(() =>
+        msgAlert({
+          heading: 'Added to Cart...',
+          message: addedToCartSuccess,
+          variant: 'success'
+        })
+      )
+      .catch(() => {
+        msgAlert({
+          heading: 'Could not add to Cart.',
+          message: addedToCartFailure,
+          variant: 'danger'
+        })
+      })
   }
 
-  const formatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2
-  })
-
-  let total = 0
-  const sumTotal = (num) => {
-    total += num
+  if (!ticket) {
+    return <p>Loading...</p>
   }
 
-  const cartContent = ticket.contents.map((item) => (
-    <div key={item.product._id} className='col-3 mt-5'>
-      <Card style={{ width: '25rem' }} className='m-auto'>
-        <Card.Img variant='top' src={`${item.product.image}`} style={card} />
-        <Card.Body>
-          <Card.Title>{item.product.name}</Card.Title>
-          <Card.Text>Price: ${item.product.price}</Card.Text>
-          <Card.Text>Quantity: {item.quantity}</Card.Text>
-          <Card.Text>
-            Subtotal: {formatter.format(item.quantity * item.product.price)}
-          </Card.Text>
-          {sumTotal(item.quantity * item.product.price)}
-          <Button
-            style={button}
-            value={item.product._id}
-            onClick={handleRemoveOne}
-            variant='secondary'>
-            -
-          </Button>{' '}
-          <Button
-            style={button}
-            value={item.product._id}
-            onClick={handleAddOne}
-            variant='secondary'>
-            +
-          </Button>{' '}
-          <Button
-            style={button}
-            value={item.product._id}
-            onClick={handleRemoveAll}
-            variant='secondary'>
-            Remove All
-          </Button>{' '}
-        </Card.Body>
-      </Card>
-    </div>
-  ))
-
+  const { name, image, description, price } = ticket
+  // const secondary = 'Secondary'
   return (
-    <div className='row'>
-      <div className='col-sm-10 col-md-8 mx-auto mt-5'>
-        <h3 style={{ color: 'white' }}>
-        Order Total: {formatter.format(total)}
-        </h3>
-        <Link to='/cart/checkout'>
-          <Button
-            style={{ width: '100px', textDecoration: 'none' }}
-            variant='warning'>
-            Checkout
-          </Button>
-        </Link>
-        <row>{cartContent}</row>
-      </div>
-    </div>
+    <Row>
+      <Col xs={10} md={8} style={cardCol}>
+        <Card style={card} className='m-auto'>
+          <Card.Img variant='top' src={`${image}`} style={cardImg} />
+          <Card.Body style={cardBody}>
+            <Card.Title style={cardTitle}>{name}</Card.Title>
+            <Card.Text>{description}</Card.Text>
+            <Card.Text>${price}</Card.Text>
+            <Button style={button} onClick={handleAddToCart} variant='primary'>Add to Cart{' '}
+            </Button>{' '}
+          </Card.Body>
+        </Card>
+      </Col>
+    </Row>
   )
 }
 
-export default withRouter(Cart)
+export default withRouter(Tickets)

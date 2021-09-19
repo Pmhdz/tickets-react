@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import apiUrl from './../../apiConfig'
+import apiUrl from '../../apiConfig'
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
 
 export default function CheckoutForm (props) {
@@ -11,7 +11,7 @@ export default function CheckoutForm (props) {
   const stripe = useStripe()
   const elements = useElements()
 
-  const { refreshCart, user, ticket } = props
+  const { refreshCart, user, product } = props
 
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
@@ -21,7 +21,7 @@ export default function CheckoutForm (props) {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ items: [{ id: 'xl-tshirt' }] })
+        body: JSON.stringify({ items: [{ id: 'tickets-sales' }] })
       })
       .then(res => {
         return res.json()
@@ -88,7 +88,7 @@ export default function CheckoutForm (props) {
       setError(null)
       setProcessing(false)
       setSucceeded(true)
-      refreshCart(ticket, user)
+      refreshCart(product, user)
     }
   }
 

@@ -9,13 +9,13 @@ import SignUp from './components/auth/SignUp'
 import SignIn from './components/auth/SignIn'
 import SignOut from './components/auth/SignOut'
 import ChangePassword from './components/auth/ChangePassword'
-import Product from './components/Products/Product'
-import Products from './components/Products/Products'
-import Cart from './components/Tickets/ticket'
+import Ticket from './components/Tickets/Ticket'
+import Tickets from './components/Tickets/Tickets'
+import Cart from './components/Products/product'
 import { Container, Row, Col } from 'react-bootstrap'
-import { initiateTicket, completeTicket } from './api/tickets'
-import CheckoutForm from './components/Tickets/CheckoutForm'
-import CompletedTickets from './components/Tickets/CompletedTickets'
+import { initiateProduct, completeProduct } from './api/products'
+import CheckoutForm from './components/Products/CheckoutForm'
+import CompletedProducts from './components/Products/CompletedProducts'
 import { checkoutSuccess, checkoutFailure } from './components/AutoDismissAlert/messages'
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
@@ -34,7 +34,7 @@ class App extends Component {
     this.state = {
       user: null,
       msgAlerts: [],
-      ticket: {
+      product: {
         contents: [],
         owner: this.user,
         coupon: '',
@@ -43,13 +43,13 @@ class App extends Component {
     }
   }
 
-	setTicket = (ticket) => this.setState({ ticket })
+	setProduct = (product) => this.setState({ product })
 
 	setUser = (user) => this.setState({ user })
 
-clearTicket = () =>
+clearProduct = () =>
   this.setState({
-    ticket: {
+    product: {
       contents: [],
       owner: this.user,
       coupon: '',
@@ -57,12 +57,12 @@ clearTicket = () =>
     }
   })
 
-refreshCart = (ticket, user) => {
-  const id = ticket._id
-  completeTicket(id, user)
-    .then(() => initiateTicket(user))
+refreshCart = (product, user) => {
+  const id = product._id
+  completeProduct(id, user)
+    .then(() => initiateProduct(user))
     .then((res) => {
-      this.setTicket(res.data.ticket)
+      this.setProduct(res.data.product)
     })
     .then((res) => {
       this.msgAlert({
@@ -83,8 +83,8 @@ refreshCart = (ticket, user) => {
 clearUser = () => this.setState({ user: '' })
 
 onSignInSuccess = (user) => {
-  initiateTicket(user).then((res) => {
-    this.setTicket(res.data.ticket)
+  initiateProduct(user).then((res) => {
+    this.setProduct(res.data.product)
   })
 }
 
@@ -104,7 +104,7 @@ msgAlert = ({ heading, message, variant }) => {
 }
 
 render () {
-  const { msgAlerts, user, ticket } = this.state
+  const { msgAlerts, user, product } = this.state
 
   return (
     <Fragment>
@@ -143,22 +143,22 @@ render () {
                 setUser={this.setUser}
                 setTicket={this.setTicket}
                 onSignInSuccess={this.onSignInSuccess}
-                ticket={ticket}
+                product={product}
               />
             )}
           />
           <Route
             exact
-            path='/products'
-            render={() => <Products msgAlert={this.msgAlert} />}
+            path='/tickets'
+            render={() => <Tickets msgAlert={this.msgAlert} />}
           />
           <Route
-            path='/products/:id'
+            path='/tickets/:id'
             render={() => (
-              <Product
+              <Ticket
                 msgAlert={this.msgAlert}
                 setOrder={this.setTicket}
-                ticket={ticket}
+                product={product}
                 user={user}
               />
             )}
@@ -190,8 +190,8 @@ render () {
               <Cart
                 msgAlert={this.msgAlert}
                 user={user}
-                ticket={ticket}
-                setTicket={this.setTicket}
+                product={product}
+                setProduct={this.setProduct}
               />
             )}
           />
@@ -204,7 +204,7 @@ render () {
                   <CheckoutForm
                     refreshCart={this.refreshCart}
                     user={user}
-                    ticket={ticket}
+                    product={product}
                   />
                 </Elements>
               </div>
@@ -212,9 +212,9 @@ render () {
           />
           <AuthenticatedRoute
             user={user}
-            path='/tickets/order-history'
+            path='/products/order-history'
             render={() => (
-              <CompletedTickets msgAlert={this.msgAlert} user={user} />
+              <CompletedProducts msgAlert={this.msgAlert} user={user} />
             )}
           />
         </main>

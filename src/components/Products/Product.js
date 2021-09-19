@@ -1,125 +1,149 @@
-import React, { useState, useEffect } from 'react'
-import { withRouter } from 'react-router-dom'
-import { Button, Card, Row, Col } from 'react-bootstrap'
-import { showProduct } from '../../api/products'
-import { updateTicket, showTicket } from '../../api/ticket'
-import {
-  addedToCartFailure,
-  addedToCartSuccess
-} from '../AutoDismissAlert/messages'
-
-const card = {
-  border: 'none',
-  borderRadius: '10px'
-}
-
-const cardImg = {
-  margin: 'auto',
-  padding: '25px',
-  width: 'auto',
-  height: '200px'
-}
-
-const cardTitle = {
-  height: '50px'
-}
-
-const cardCol = {
-  margin: 'auto',
-  marginTop: '10px'
-}
-
-const cardBody = {
-  backgroundColor: 'grey',
-  borderRadius: '0px 0px 8px 8px',
-  color: 'white'
-}
+import React from 'react'
+import { withRouter, Link } from 'react-router-dom'
+import { Button, Card } from 'react-bootstrap'
+import { updateProduct, showProduct } from '../../api/products'
 
 const button = {
   width: 'inherit'
 }
 
-const Products = (props) => {
-  const [product, setProduct] = useState(null)
-  const { ticket, user, setTicket, msgAlert } = props
+const card = {
+  display: 'inline-block',
+  margin: 'auto',
+  width: '75%',
+  padding: '25px'
+}
 
-  useEffect(() => {
-    showProduct(props.match.params.id)
-      .then((res) => setProduct(res.data.product))
-      .catch(console.error)
-  }, [])
+const Cart = (props) => {
+  const { product, user, setProduct } = props
 
-  const handleAddToCart = () => {
-    const oldTicket = ticket.contents
-    let matched = false
-    const ticketObj = {
-      id: product._id,
-      quantity: 1,
-      product: product
-    }
-    if (oldTicket.length === 0) {
-      oldTicket.push(ticketObj)
-    } else {
-      // iterate each item, if id's match, increment quantity
-      oldTicket.forEach((item) => {
-        if (item.id === product._id) {
-          // this will track if we've matched for below boolean
-          matched = true
-          item.quantity++
-        }
-      })
-      // after the forEach if there's no match go ahead and push the object,
-      // we need this tracker boolean, because we don't want to have the case of pushing
-      // multiple time inside the forEach loop.  This gives us a way to remember that there
-      // was no match.  It will false-out if it was turned true.
-      if (matched === false) {
-        oldTicket.push(ticketObj)
+  const handleRemoveOne = (event) => {
+    // event.preventDefault()
+    const targetId = event.target.value
+    // grad the order contents from state bind to oldOrder
+    let oldProduct = product.contents
+    // iterate over all order items, when we match our targetId (argument from function call),
+    // decrement by one, only if the quantity is 1 or more.  If not, do nothing, deal with
+    // this case in the next statement.
+    oldProduct.forEach((item) => {
+      if (item.id === targetId && item.quantity > 0) {
+        item.quantity--
       }
-    }
-
-    const id = ticket._id
-    updateTicket(id, oldTicket, user)
+    })
+    // this uses a negative condition for the boolean to delete a zero amount
+    oldProduct = oldProduct.filter((item) => item.quantity !== 0)
+    // now updates the order array at the API level.
+    const id = product._id
+    updateProduct(id, oldProduct, user)
       .then(() => {
-        return showTicket(id, user)
+        return showProduct(id, user)
       })
-      .then((res) => setTicket(res.data.ticket))
-      .then(() =>
-        msgAlert({
-          heading: 'Added to Cart...',
-          message: addedToCartSuccess,
-          variant: 'success'
-        })
-      )
-      .catch(() => {
-        msgAlert({
-          heading: 'Could not add to Cart.',
-          message: addedToCartFailure,
-          variant: 'danger'
-        })
-      })
+      .then((res) => setProduct(res.data.product))
+      .catch((err) => console.error(err))
   }
 
-  if (!product) {
-    return <p>Loading...</p>
+  const handleAddOne = (event) => {
+    // getting id from the value stored on the card in the DOM
+    const targetId = event.target.value
+    // variable to hold our state order object
+    const oldProduct = product.contents
+    // iterate through all our order and increment where the id's match
+    oldProduct.forEach((item) => {
+      if (item.id === targetId) {
+        item.quantity++
+      }
+    })
+    // API call to update the order
+    const id = product._id
+    updateProduct(id, oldProduct, user)
+      .then(() => {
+        return showProduct(id, user)
+      })
+      .then((res) => setProduct(res.data.product))
+      .catch((err) => console.error(err))
   }
 
-  const { name, image, description, price } = product
-  // const secondary = 'Secondary'
+  const handleRemoveAll = (event) => {
+    // pull ID from DOM element we clicked
+    const targetId = event.target.value
+    // hold our state object in a local variable
+    const oldProduct = product.contents
+    // iterate through and find the matching ID and set quantity to 0
+    oldProduct.forEach((item) => {
+      if (item.id === targetId) {
+        item.quantity = 0
+      }
+    })
+    // call handle removeOne to delete out of the cart.
+    handleRemoveOne(event)
+  }
+
+  const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2
+  })
+
+  let total = 0
+  const sumTotal = (num) => {
+    total += num
+  }
+
+  const cartContent = product.contents.map((item) => (
+    <div key={item.product._id} className='col-3 mt-5'>
+      <Card style={{ width: '25rem' }} className='m-auto'>
+        <Card.Img variant='top' src={`${item.product.image}`} style={card} />
+        <Card.Body>
+          <Card.Title>{item.product.name}</Card.Title>
+          <Card.Text>Price: ${item.product.price}</Card.Text>
+          <Card.Text>Quantity: {item.quantity}</Card.Text>
+          <Card.Text>
+            Subtotal: {formatter.format(item.quantity * item.product.price)}
+          </Card.Text>
+          {sumTotal(item.quantity * item.product.price)}
+          <Button
+            style={button}
+            value={item.product._id}
+            onClick={handleRemoveOne}
+            variant='secondary'>
+            -
+          </Button>{' '}
+          <Button
+            style={button}
+            value={item.product._id}
+            onClick={handleAddOne}
+            variant='secondary'>
+            +
+          </Button>{' '}
+          <Button
+            style={button}
+            value={item.product._id}
+            onClick={handleRemoveAll}
+            variant='secondary'>
+            Remove All
+          </Button>{' '}
+        </Card.Body>
+      </Card>
+    </div>
+  ))
+
   return (
-    <Row>
-      <Col xs={10} md={8} style={cardCol}>
-        <Card style={card} className='m-auto'>
-          <Card.Img variant='top' src={`${image}`} style={cardImg} />
-          <Card.Body style={cardBody}>
-            <Card.Title style={cardTitle}>{name}</Card.Title>
-            <Card.Text>{description}</Card.Text>
-            <Card.Text>${price}</Card.Text>
-            <Button style={button} onClick={handleAddToCart} variant='primary'>Add to Cart </Button>{' '}
-          </Card.Body>
-        </Card>
-      </Col>
-    </Row>
+    <div className='row'>
+      <div className='col-sm-10 col-md-8 mx-auto mt-5'>
+        <h3 style={{ color: 'white' }}>
+        Order Total: {formatter.format(total)}
+        </h3>
+        <Link to='/cart/checkout'>
+          <Button
+            style={{ width: '100px', textDecoration: 'none' }}
+            variant='warning'>
+            Checkout
+          </Button>
+        </Link>
+        <row>{cartContent}</row>
+      </div>
+    </div>
   )
 }
 
-export default withRouter(Products)
+export default withRouter(Cart)

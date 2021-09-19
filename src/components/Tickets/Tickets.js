@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { withRouter, Link } from 'react-router-dom'
 import { Card, Col, Row } from 'react-bootstrap'
 
-import { index } from '../../api/products'
+import { index } from '../../api/tickets'
 
 const cardImg = {
   margin: 'auto',
@@ -31,19 +31,19 @@ const card = {
   borderRadius: '10px'
 }
 
-const Products = (props) => {
-  const [products, setProducts] = useState([])
+const Tickets = (props) => {
+  const [tickets, setTickets] = useState([])
 
   useEffect(() => {
     index()
-      .then((res) => setProducts(res.data.products))
+      .then((res) => setTickets(res.data.tickets))
       .catch(console.error)
   }, [])
 
-  const productList = products.map((item) => (
+  const ticketList = tickets.map((item) => (
     <Col xs={12} md={6} lg={4} xl={4} key={item._id} style={cardCol}>
       <Card style={card} className='m-auto'>
-        <Link style={{ margin: 'auto' }} to={`/products/${item._id}`}>
+        <Link style={{ margin: 'auto' }} to={`/tickets/${item._id}`}>
           <Card.Img variant='top' src={`${item.image}`} style={cardImg} />
         </Link>
         <Card.Body style={cardBody}>
@@ -56,9 +56,9 @@ const Products = (props) => {
 
   return (
     <Row>
-      <h3 className='text-light'>Products</h3>
+      <h3 className='text-light'>Tickets</h3>
       <Col xs={12} style={{ marginTop: '10px' }}>
-        <Row>{productList}</Row>
+        <Row>{ticketList}</Row>
       </Col>
 
       <div className='col-12 mt-5'></div>
@@ -66,4 +66,4 @@ const Products = (props) => {
   )
 }
 
-export default withRouter(Products)
+export default withRouter(Tickets)
