@@ -28,7 +28,7 @@ const CompletedProducts = (props) => {
   ))
 
   const list = {
-    color: 'white'
+    color: 'black'
   }
   return (
     <div className='row'>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { withRouter } from 'react-router-dom'
 import { Button, Card, Row, Col } from 'react-bootstrap'
-import { showTicket } from '../../api'
+import { showTicket } from '../../api/tickets'
 import { updateProduct, showProduct } from '../../api/products'
 import {
   addedToCartFailure,
@@ -104,7 +104,6 @@ const Tickets = (props) => {
   }
 
   const { name, image, description, price } = ticket
-  // const secondary = 'Secondary'
   return (
     <Row>
       <Col xs={10} md={8} style={cardCol}>
