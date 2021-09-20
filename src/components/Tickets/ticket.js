@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { withRouter } from 'react-router-dom'
 import { Button, Card, Row, Col } from 'react-bootstrap'
 import { showTicket } from '../../api/tickets'
-import { updateProduct, showProduct } from '../../api/products'
+import { updateEvent, showEvent } from '../../api/events'
 import {
   addedToCartFailure,
   addedToCartSuccess
@@ -41,7 +41,7 @@ const button = {
 
 const Tickets = (props) => {
   const [ticket, setTicket] = useState(null)
-  const { product, user, setProduct, msgAlert } = props
+  const { event, user, setEvent, msgAlert } = props
 
   useEffect(() => {
     showTicket(props.match.params.id)
@@ -50,18 +50,18 @@ const Tickets = (props) => {
   }, [])
 
   const handleAddToCart = () => {
-    const oldProduct = product.contents
+    const oldEvent = event.contents
     let matched = false
-    const productObj = {
+    const eventObj = {
       id: ticket._id,
       quantity: 1,
       ticket: ticket
     }
-    if (oldProduct.length === 0) {
-      oldProduct.push(productObj)
+    if (oldEvent.length === 0) {
+      oldEvent.push(eventObj)
     } else {
       // iterate each item, if id's match, increment quantity
-      oldProduct.forEach((item) => {
+      oldEvent.forEach((item) => {
         if (item.id === ticket._id) {
           // this will track if we've matched for below boolean
           matched = true
@@ -73,16 +73,16 @@ const Tickets = (props) => {
       // multiple time inside the forEach loop.  This gives us a way to remember that there
       // was no match.  It will false-out if it was turned true.
       if (matched === false) {
-        oldProduct.push(productObj)
+        oldEvent.push(eventObj)
       }
     }
 
-    const id = product._id
-    updateProduct(id, oldProduct, user)
+    const id = event._id
+    updateEvent(id, oldEvent, user)
       .then(() => {
-        return showProduct(id, user)
+        return showEvent(id, user)
       })
-      .then((res) => setProduct(res.data.product))
+      .then((res) => setEvent(res.data.event))
       .then(() =>
         msgAlert({
           heading: 'Added to Cart...',

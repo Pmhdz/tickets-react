@@ -1,7 +1,7 @@
 import React from 'react'
 import { withRouter, Link } from 'react-router-dom'
 import { Button, Card } from 'react-bootstrap'
-import { updateProduct, showProduct } from '../../api/products'
+import { updateEvent, showEvent } from '../../api/events'
 
 const button = {
   width: 'inherit'
@@ -15,30 +15,30 @@ const card = {
 }
 
 const Cart = (props) => {
-  const { product, user, setProduct } = props
+  const { event, user, setEvent } = props
 
   const handleRemoveOne = (event) => {
     // event.preventDefault()
     const targetId = event.target.value
     // grad the order contents from state bind to oldOrder
-    let oldProduct = product.contents
+    let oldEvent = event.contents
     // iterate over all order items, when we match our targetId (argument from function call),
     // decrement by one, only if the quantity is 1 or more.  If not, do nothing, deal with
     // this case in the next statement.
-    oldProduct.forEach((item) => {
+    oldEvent.forEach((item) => {
       if (item.id === targetId && item.quantity > 0) {
         item.quantity--
       }
     })
     // this uses a negative condition for the boolean to delete a zero amount
-    oldProduct = oldProduct.filter((item) => item.quantity !== 0)
+    oldEvent = oldEvent.filter((item) => item.quantity !== 0)
     // now updates the order array at the API level.
-    const id = product._id
-    updateProduct(id, oldProduct, user)
+    const id = event._id
+    updateEvent(id, oldEvent, user)
       .then(() => {
-        return showProduct(id, user)
+        return showEvent(id, user)
       })
-      .then((res) => setProduct(res.data.product))
+      .then((res) => setEvent(res.data.event))
       .catch((err) => console.error(err))
   }
 
@@ -46,20 +46,20 @@ const Cart = (props) => {
     // getting id from the value stored on the card in the DOM
     const targetId = event.target.value
     // variable to hold our state order object
-    const oldProduct = product.contents
+    const oldEvent = event.contents
     // iterate through all our order and increment where the id's match
-    oldProduct.forEach((item) => {
+    oldEvent.forEach((item) => {
       if (item.id === targetId) {
         item.quantity++
       }
     })
     // API call to update the order
-    const id = product._id
-    updateProduct(id, oldProduct, user)
+    const id = event._id
+    updateEvent(id, oldEvent, user)
       .then(() => {
-        return showProduct(id, user)
+        return showEvent(id, user)
       })
-      .then((res) => setProduct(res.data.product))
+      .then((res) => setEvent(res.data.event))
       .catch((err) => console.error(err))
   }
 
@@ -67,9 +67,9 @@ const Cart = (props) => {
     // pull ID from DOM element we clicked
     const targetId = event.target.value
     // hold our state object in a local variable
-    const oldProduct = product.contents
+    const oldEvent = event.contents
     // iterate through and find the matching ID and set quantity to 0
-    oldProduct.forEach((item) => {
+    oldEvent.forEach((item) => {
       if (item.id === targetId) {
         item.quantity = 0
       }
@@ -89,35 +89,35 @@ const Cart = (props) => {
     total += num
   }
 
-  const cartContent = product.contents.map((item) => (
-    <div key={item.product._id} className='col-3 mt-5'>
+  const cartContent = event.contents.map((item) => (
+    <div key={item.event._id} className='col-3 mt-5'>
       <Card style={{ width: '25rem' }} className='m-auto'>
-        <Card.Img variant='top' src={`${item.product.image}`} style={card} />
+        <Card.Img variant='top' src={`${item.event.image}`} style={card} />
         <Card.Body>
-          <Card.Title>{item.product.name}</Card.Title>
-          <Card.Text>Price: ${item.product.price}</Card.Text>
+          <Card.Title>{item.event.name}</Card.Title>
+          <Card.Text>Price: ${item.event.price}</Card.Text>
           <Card.Text>Quantity: {item.quantity}</Card.Text>
           <Card.Text>
-            Subtotal: {formatter.format(item.quantity * item.product.price)}
+            Subtotal: {formatter.format(item.quantity * item.event.price)}
           </Card.Text>
-          {sumTotal(item.quantity * item.product.price)}
+          {sumTotal(item.quantity * item.event.price)}
           <Button
             style={button}
-            value={item.product._id}
+            value={item.event._id}
             onClick={handleRemoveOne}
             variant='secondary'>
             -
           </Button>{' '}
           <Button
             style={button}
-            value={item.product._id}
+            value={item.event._id}
             onClick={handleAddOne}
             variant='secondary'>
             +
           </Button>{' '}
           <Button
             style={button}
-            value={item.product._id}
+            value={item.event._id}
             onClick={handleRemoveAll}
             variant='secondary'>
             Remove All

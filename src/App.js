@@ -11,11 +11,11 @@ import SignOut from './components/auth/SignOut'
 import ChangePassword from './components/auth/ChangePassword'
 import Ticket from './components/Tickets/Ticket'
 import Tickets from './components/Tickets/Tickets'
-import Cart from './components/Products/product'
+import Cart from './components/Events/event'
 import { Container, Row, Col } from 'react-bootstrap'
-import { initiateProduct, completeProduct } from './api/products'
-import CheckoutForm from './components/Products/CheckoutForm'
-import CompletedProducts from './components/Products/CompletedProducts'
+import { initiateEvent, completeEvent } from './api/events'
+import CheckoutForm from './components/Events/CheckoutForm'
+import CompletedEvents from './components/Events/CompletedTickets'
 import { checkoutSuccess, checkoutFailure } from './components/AutoDismissAlert/messages'
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
@@ -34,7 +34,7 @@ class App extends Component {
     this.state = {
       user: null,
       msgAlerts: [],
-      product: {
+      event: {
         contents: [],
         owner: this.user,
         coupon: '',
@@ -43,13 +43,13 @@ class App extends Component {
     }
   }
 
-	setProduct = (product) => this.setState({ product })
+	setEvent = (event) => this.setState({ event })
 
 	setUser = (user) => this.setState({ user })
 
-clearProduct = () =>
+clearEvent = () =>
   this.setState({
-    product: {
+    event: {
       contents: [],
       owner: this.user,
       coupon: '',
@@ -57,12 +57,12 @@ clearProduct = () =>
     }
   })
 
-refreshCart = (product, user) => {
-  const id = product._id
-  completeProduct(id, user)
-    .then(() => initiateProduct(user))
+refreshCart = (event, user) => {
+  const id = event._id
+  completeEvent(id, user)
+    .then(() => initiateEvent(user))
     .then((res) => {
-      this.setProduct(res.data.product)
+      this.setEvent(res.data.event)
     })
     .then((res) => {
       this.msgAlert({
@@ -83,8 +83,8 @@ refreshCart = (product, user) => {
 clearUser = () => this.setState({ user: '' })
 
 onSignInSuccess = (user) => {
-  initiateProduct(user).then((res) => {
-    this.setProduct(res.data.product)
+  initiateEvent(user).then((res) => {
+    this.setEvent(res.data.event)
   })
 }
 
@@ -104,7 +104,7 @@ msgAlert = ({ heading, message, variant }) => {
 }
 
 render () {
-  const { msgAlerts, user, product } = this.state
+  const { msgAlerts, user, event } = this.state
 
   return (
     <Fragment>
@@ -143,7 +143,7 @@ render () {
                 setUser={this.setUser}
                 setTicket={this.setTicket}
                 onSignInSuccess={this.onSignInSuccess}
-                product={product}
+                event={event}
               />
             )}
           />
@@ -158,7 +158,7 @@ render () {
               <Ticket
                 msgAlert={this.msgAlert}
                 setOrder={this.setTicket}
-                product={product}
+                event={event}
                 user={user}
               />
             )}
@@ -190,8 +190,8 @@ render () {
               <Cart
                 msgAlert={this.msgAlert}
                 user={user}
-                product={product}
-                setProduct={this.setProduct}
+                event={event}
+                setEvent={this.setEvent}
               />
             )}
           />
@@ -204,7 +204,7 @@ render () {
                   <CheckoutForm
                     refreshCart={this.refreshCart}
                     user={user}
-                    product={product}
+                    event={event}
                   />
                 </Elements>
               </div>
@@ -212,9 +212,9 @@ render () {
           />
           <AuthenticatedRoute
             user={user}
-            path='/products/order-history'
+            path='/events/order-history'
             render={() => (
-              <CompletedProducts msgAlert={this.msgAlert} user={user} />
+              <CompletedEvents msgAlert={this.msgAlert} user={user} />
             )}
           />
         </main>

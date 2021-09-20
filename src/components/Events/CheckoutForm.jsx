@@ -11,7 +11,7 @@ export default function CheckoutForm (props) {
   const stripe = useStripe()
   const elements = useElements()
 
-  const { refreshCart, user, product } = props
+  const { refreshCart, user, event } = props
 
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
@@ -88,7 +88,7 @@ export default function CheckoutForm (props) {
       setError(null)
       setProcessing(false)
       setSucceeded(true)
-      refreshCart(product, user)
+      refreshCart(event, user)
     }
   }
 
