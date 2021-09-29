@@ -1,8 +1,8 @@
 # Welcome to Pick It Ticket App
-This project is kind of a ticketmaster clone and closely similar to E-Commerce store.
+Original idea was to make a e com but it is way too much work I changed my mind in the beginning of the project. This project is called Pick It Tickets. This a app where a user is allow to create a tickets, view, update, delete.
 
 ## Technology used
-Html, Css, React, Express, JavaScript, Stripe and Postman 
+Html, Css, React, Express, JavaScript,and Postman 
 
 ## Wireframe
 https://imgur.com/a/BVTTxAt

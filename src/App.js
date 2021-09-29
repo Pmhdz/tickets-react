@@ -11,6 +11,7 @@ import SignOut from './components/auth/SignOut'
 import ChangePassword from './components/auth/ChangePassword'
 import Ticket from './components/Tickets/Ticket'
 import Tickets from './components/Tickets/Tickets'
+import CreateTicket from './components/Tickets/CreateTicket'
 import Cart from './components/Events/event'
 import { Container, Row, Col } from 'react-bootstrap'
 import { initiateEvent, completeEvent } from './api/events'
@@ -20,6 +21,7 @@ import { checkoutSuccess, checkoutFailure } from './components/AutoDismissAlert/
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
 
+// change this to secret key
 const promise = loadStripe(
   'pk_test_51JanJmHKOMeXXROM2h6EjycWXPgjGQ8T9GG4133lMs8VsiCrtK2dHHsUZGnm0R3vOS6Ue91lDJYhbggljlEf04Hf009GBHcqv4'
 )
@@ -180,6 +182,14 @@ render () {
             path='/change-password'
             render={() => (
               <ChangePassword msgAlert={this.msgAlert} user={user} />
+            )}
+          />
+          <AuthenticatedRoute
+            user={user}
+            exact
+            path='/create-ticket'
+            render={() => (
+              <CreateTicket msgAlert={this.msgAlert} user={user} />
             )}
           />
           <AuthenticatedRoute
