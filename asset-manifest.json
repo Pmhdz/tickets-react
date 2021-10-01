@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/tickets-react/static/css/main.1a5c0546.chunk.css",
-    "main.js": "/tickets-react/static/js/main.1dfb8f5e.chunk.js",
-    "main.js.map": "/tickets-react/static/js/main.1dfb8f5e.chunk.js.map",
+    "main.js": "/tickets-react/static/js/main.11adf7e3.chunk.js",
+    "main.js.map": "/tickets-react/static/js/main.11adf7e3.chunk.js.map",
     "runtime-main.js": "/tickets-react/static/js/runtime-main.f8d40f92.js",
     "runtime-main.js.map": "/tickets-react/static/js/runtime-main.f8d40f92.js.map",
     "static/js/2.e527b3b5.chunk.js": "/tickets-react/static/js/2.e527b3b5.chunk.js",
@@ -15,6 +15,6 @@
     "static/js/runtime-main.f8d40f92.js",
     "static/js/2.e527b3b5.chunk.js",
     "static/css/main.1a5c0546.chunk.css",
-    "static/js/main.1dfb8f5e.chunk.js"
+    "static/js/main.11adf7e3.chunk.js"
   ]
 }
