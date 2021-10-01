@@ -81,7 +81,7 @@ render () {
             <>
               <Link to={`/tickets/${match.params.id}/update`}>
                 <Button
-                  variant='warning'
+                  variant='info'
                   style={{
                     width: '100%',
                     display: 'grid',

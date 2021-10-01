@@ -41,7 +41,7 @@ render () {
   // const { user } = this.props
   let ticketsJsx
   if (ticket.length === 0) {
-    ticketsJsx = 'Got no tickets, Go Create Some!'
+    ticketsJsx = 'You do not have any tickets. Go ahead create one! :)'
   } else {
     ticketsJsx = ticket.map((ticket) => (
       <li key={ticket._id}>
@@ -52,7 +52,7 @@ render () {
 
   return (
     <>
-      <h3>All Your Personal Tickets</h3>
+      <h3>All Tickets That Are Up For Sale</h3>
       <br></br>
       {ticketsJsx}
     </>

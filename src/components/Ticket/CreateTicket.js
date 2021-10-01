@@ -90,7 +90,7 @@ render () {
         </Form.Group>
         <Button
           type='submit'
-          variant='outline-dark'
+          variant='info'
           className='grad my-3'
           style={{ width: '100%' }}>
           Submit

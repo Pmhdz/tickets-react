@@ -99,14 +99,14 @@ render () {
         </Form.Group>
         <Button
           type='submit'
-          variant='outline-dark'
+          variant='info'
           className='grad my-3'
           style={{ width: '100%' }}>Submit
         </Button>
       </Form>
       <Button
         onClick={() => this.handleDelete}
-        variant='warning'
+        variant='dark'
         style={{ width: '100%' }}>Delete
       </Button>
     </>
