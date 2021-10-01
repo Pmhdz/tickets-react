@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/tickets-react/static/css/main.432dfbff.chunk.css",
-    "main.js": "/tickets-react/static/js/main.09524032.chunk.js",
-    "main.js.map": "/tickets-react/static/js/main.09524032.chunk.js.map",
+    "main.css": "/tickets-react/static/css/main.1a5c0546.chunk.css",
+    "main.js": "/tickets-react/static/js/main.1dfb8f5e.chunk.js",
+    "main.js.map": "/tickets-react/static/js/main.1dfb8f5e.chunk.js.map",
     "runtime-main.js": "/tickets-react/static/js/runtime-main.f8d40f92.js",
     "runtime-main.js.map": "/tickets-react/static/js/runtime-main.f8d40f92.js.map",
-    "static/js/2.f1fb07ac.chunk.js": "/tickets-react/static/js/2.f1fb07ac.chunk.js",
-    "static/js/2.f1fb07ac.chunk.js.map": "/tickets-react/static/js/2.f1fb07ac.chunk.js.map",
+    "static/js/2.e527b3b5.chunk.js": "/tickets-react/static/js/2.e527b3b5.chunk.js",
+    "static/js/2.e527b3b5.chunk.js.map": "/tickets-react/static/js/2.e527b3b5.chunk.js.map",
     "index.html": "/tickets-react/index.html",
-    "static/css/main.432dfbff.chunk.css.map": "/tickets-react/static/css/main.432dfbff.chunk.css.map",
-    "static/js/2.f1fb07ac.chunk.js.LICENSE.txt": "/tickets-react/static/js/2.f1fb07ac.chunk.js.LICENSE.txt"
+    "static/css/main.1a5c0546.chunk.css.map": "/tickets-react/static/css/main.1a5c0546.chunk.css.map",
+    "static/js/2.e527b3b5.chunk.js.LICENSE.txt": "/tickets-react/static/js/2.e527b3b5.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.f8d40f92.js",
-    "static/js/2.f1fb07ac.chunk.js",
-    "static/css/main.432dfbff.chunk.css",
-    "static/js/main.09524032.chunk.js"
+    "static/js/2.e527b3b5.chunk.js",
+    "static/css/main.1a5c0546.chunk.css",
+    "static/js/main.1dfb8f5e.chunk.js"
   ]
 }
