@@ -11,7 +11,7 @@ export default function Home () {
             marginTop: '20vh',
             color: 'primary',
             textDecoration: 'none'
-          }}>The App That Allows Users To Create A Tickets And Update Tickets
+          }}>This App That Allows Users To Create A Tickets And Update Tickets That Any Events is Coming Up
         </h1>
       </div>
       <div>
