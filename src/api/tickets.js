@@ -2,7 +2,7 @@ import apiUrl from '../apiConfig'
 import axios from 'axios'
 // import { data } from 'autoprefixer'
 
-// create tickets request
+// create ticket
 export const createTicket = (data, user) => {
   return axios({
     url: apiUrl + '/create-ticket',
@@ -14,7 +14,7 @@ export const createTicket = (data, user) => {
   })
 }
 
-// index of all tickets
+// show all tickets
 export const indexTickets = (user, id) => {
   return axios({
     url: apiUrl + '/tickets?user=' + user._id,
@@ -25,7 +25,7 @@ export const indexTickets = (user, id) => {
   })
 }
 
-// show one ticket
+// show a ticket
 export const showTicket = (id, user) => {
   return axios({
     url: apiUrl + '/tickets/' + id,
